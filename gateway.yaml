@@ -1,0 +1,40 @@
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: pbs-backstage
+  namespace: pbs-backstage
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 8443 # Default traefik helm chart port, will be mapped to 443
+      hostname: pbs-backstage.tractor.scout.ch
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: secret-tls
+            namespace: pbs-backstage
+      allowedRoutes:
+        namespaces:
+          from: Same
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: www-redirect
+  namespace: pbs-backstage
+spec:
+  parentRefs:
+    - name: pbs-backstage
+      sectionName: https
+      kind: Gateway
+  rules:
+    - filters:
+        - type: RequestRedirect
+          requestRedirect:
+            hostname: pbs-backstage.tractor.scout.ch
+            statusCode: 302

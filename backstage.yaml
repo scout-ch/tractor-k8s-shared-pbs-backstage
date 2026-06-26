@@ -1,48 +1,75 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: backstage
-  namespace: backstage
+  name: pbs-backstage
+  namespace: pbs-backstage
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: backstage
+      app: pbs-backstage
   template:
     metadata:
       labels:
-        app: backstage
+        app: pbs-backstage
     spec:
       containers:
         - name: backstage
-          image: ghcr.io/diegosteiner/backstage/backstage:latest
-          imagePullPolicy: IfNotPresent
+          image: ghcr.io/scout-ch/itkom-atlas-v2:latest
+          imagePullPolicy: Always
           ports:
-            - name: http
-              containerPort: 7007
-          envFrom:
-            - secretRef:
-                name: backstage-secrets
-          # Uncomment if health checks are enabled in your app:
-          # https://backstage.io/docs/plugins/observability#health-checks
-          #readinessProbe:
-          #  httpGet:
-          #    port: 7007
-          #    path: /healthcheck
-          #livenessProbe:
-          #  httpGet:
-          #    port: 7007
-          #    path: /healthcheck
+            - name: 8080
+              containerPort: 8080
+          # envFrom:
+          #   - secretRef:
+          #       name: pbs-backstage-secrets
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: backstage
-  namespace: backstage
+  name: pbs-backstage
+  namespace: pbs-backstage
 spec:
   selector:
-    app: backstage
+    app: pbs-backstage
   ports:
-    - name: http
-      port: 7007
-      targetPort: http
+    - port: 8080
+      targetPort: 8080
+---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: HTTPRoute
+# metadata:
+#   name: backend
+#   namespace: mova-erinnerungsbuch
+# spec:
+#   parentRefs:
+#     - name: mova-erinnerungsbuch
+#       sectionName: https
+#       kind: Gateway
+#   rules:
+#     - matches:
+#         - path:
+#             type: PathPrefix
+#             value: /admin
+#         - path:
+#             type: PathPrefix
+#             value: /api
+#         - path:
+#             type: PathPrefix
+#             value: /graphql
+#         - path:
+#             type: PathPrefix
+#             value: /cpresources
+#         - path:
+#             type: PathPrefix
+#             value: /actions
+#         - path:
+#             type: PathPrefix
+#             value: /sitemap.xml
+#         - path:
+#             type: PathPrefix
+#             value: /robots.txt
+
+#       backendRefs:
+#         - name: backend
+#           port: 8080
