@@ -17,9 +17,6 @@ spec:
         - name: backstage
           image: ghcr.io/scout-ch/itkom-atlas-v2:latest
           imagePullPolicy: Always
-          ports:
-            - name: 8080
-              containerPort: 8080
           # envFrom:
           #   - secretRef:
           #       name: pbs-backstage-secrets
