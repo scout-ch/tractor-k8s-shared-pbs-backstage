@@ -13,9 +13,11 @@ spec:
       labels:
         app: pbs-backstage
     spec:
+      imagePullSecrets:
+        - name: pull-secret
       containers:
         - name: backstage
-          image: ghcr.io/scout-ch/itkom-atlas-v2:latest
+          image: ghcr.io/scout-ch/itkom-atlas:latest
           imagePullPolicy: Always
           # envFrom:
           #   - secretRef:
