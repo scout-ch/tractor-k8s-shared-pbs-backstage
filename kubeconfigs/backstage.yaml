@@ -19,9 +19,9 @@ spec:
         - name: backstage
           image: ghcr.io/scout-ch/itkom-atlas:latest
           imagePullPolicy: Always
-          # envFrom:
-          #   - secretRef:
-          #       name: pbs-backstage-secrets
+          envFrom:
+            - secretRef:
+                name: pbs-backstage-secret
 ---
 apiVersion: v1
 kind: Service
