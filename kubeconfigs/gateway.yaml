@@ -25,7 +25,7 @@ spec:
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
-  name: backstage-route
+  name: pbs-backstage-route
   namespace: pbs-backstage
 spec:
   parentRefs:
@@ -34,7 +34,7 @@ spec:
       kind: Gateway
   rules:
     - backendRefs:
-        - name: backstage
+        - name: pbs-backstage
           port: 8080
 # ---
 # apiVersion: gateway.networking.k8s.io/v1
