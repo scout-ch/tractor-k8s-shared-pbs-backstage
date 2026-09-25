@@ -17,7 +17,7 @@ spec:
         - name: pull-secret
       containers:
         - name: backstage
-          image: ghcr.io/scout-ch/itkom-atlas:latest
+          image: ghcr.io/scout-ch/itkom-atlas@sha256:140e784c3573887906d2fb6ca44d21115dcbb3445231228d28151714b4529891
           imagePullPolicy: Always
           envFrom:
             - secretRef:
